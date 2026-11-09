@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="stylesheet" href="./main.css">
+  <title>Frontend Mentor | Job Listings</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 1.4rem; text-align: center; margin-block: 2rem; }
+    .attribution a { color: hsl(228, 45%, 44%);}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="abstract_bg"></div>
+    <header class="page_header">
+        <div class="content_container">    
+            <div class="filter_btn_container active">
+                <!-- Filter tags container -->
+                <div class="filter_tags_container">
+                    <!-- Single Filter Btn -->
+                    <div class="filter_tag">
+                        <p class="tag">JavaScript</p>
+                        <button type="button" aria-label="remove from filter list" class="closeBtn" data-id="${btn}">
+                          <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="#FFF" fill-rule="evenodd" d="M11.314 0l2.121 2.121-4.596 4.596 4.596 4.597-2.121 2.121-4.597-4.596-4.596 4.596L0 11.314l4.596-4.597L0 2.121 2.121 0l4.596 4.596L11.314 0z"/></svg>
+                        </button>
+                    </div>
+                    <!-- Single Filter Btn -->
+                    <div class="filter_tag">
+                        <p class="tag">Frontend</p>
+                        <button type="button" aria-label="remove from filter list" class="closeBtn">
+                          <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="#FFF" fill-rule="evenodd" d="M11.314 0l2.121 2.121-4.596 4.596 4.596 4.597-2.121 2.121-4.597-4.596-4.596 4.596L0 11.314l4.596-4.597L0 2.121 2.121 0l4.596 4.596L11.314 0z"/></svg>
+                        </button>
+                    </div>
+                    <!-- Single Filter Btn -->
+                    <div class="filter_tag">
+                        <p class="tag">HTML</p>
+                         <button type="button" aria-label="remove from filter list" class="closeBtn">
+                          <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="#FFF" fill-rule="evenodd" d="M11.314 0l2.121 2.121-4.596 4.596 4.596 4.597-2.121 2.121-4.597-4.596-4.596 4.596L0 11.314l4.596-4.597L0 2.121 2.121 0l4.596 4.596L11.314 0z"/></svg>
+                        </button>
+                    </div>  
+                </div>
+                <!-- Clear button -->
+                <button type="button" class="clear_btn" id="clearBtn">Clear</button>
+            </div>
+        </div>
+    </header>
+    <section class="jobList">
+        <div class="content_container jobs_grid">
+          <!-- Single Job Card -->
+          <article class="job_offer_card tagged">
+                <!-- logo img -->
+                 <div class="logo_wrapper">
+                    <img src="./images/photosnap.svg" alt="photosnap logo" class="logo_img" />
+                 </div>
+                 <!-- Job description -->
+                 <div class="job_description_wrapper">
+                    <div class="job_offer_info">
+                        <p class="company">Photosnap</p>
+                        <div class="dateline_tags">
+                            <span class="new">new!</span>
+                            <span class="featured">featured</span>
+                        </div>
+                    </div>
+                    <p class="job_title">senior frontend developer</p>
+                    <div class="job_desc">
+                        <span class="job_desc_text">1d ago</span>
+                        <span class="dot"></span>
+                        <span class="job_desc_text">full time</span>
+                        <span class="dot"></span>
+                        <span class="job_desc_text">USA only</span>
+                    </div>
+                 </div>
+                 <!-- Hard skills tags list -->
+                 <div class="hard_skills_tags_list">
+                    <button type="button" class="skill_btn">frontend</button>
+                    <button type="button" class="skill_btn">senior</button>
+                    <button type="button" class="skill_btn">HTML</button>
+                    <button type="button" class="skill_btn">CSS</button>
+                    <button type="button" class="skill_btn">javascript</button>
+                 </div>
+            </article>
+            <article class="job_offer_card tagged">
+                <!-- logo img -->
+                 <div class="logo_wrapper">
+                    <img src="./images/manage.svg" alt="manage company logo" class="logo_img" />
+                 </div>
+                 <!-- Job description -->
+                 <div class="job_description_wrapper">
+                    <div class="job_offer_info">
+                        <p class="company">Manage</p>
+                        <div class="dateline_tags">
+                            <span class="new">new!</span>
+                            <span class="featured">featured</span>
+                        </div>
+                    </div>
+                    <p class="job_title">fullstack developer</p>
+                    <div class="job_desc">
+                        <span class="job_desc_text">1d ago</span>
+                        <span class="dot"></span>
+                        <span class="job_desc_text" id="jobType">part time</span>
+                        <span class="dot"></span>
+                        <span class="job_desc_text" id="jobLocation">remote</span>
+                    </div>
+                 </div>
+                 <!-- Hard skills tags list -->
+                 <div class="hard_skills_tags_list">
+                    <button type="button" class="skill_btn">fullstack</button>
+                    <button type="button" class="skill_btn">midweight</button>
+                    <button type="button" class="skill_btn">python</button>
+                    <button type="button" class="skill_btn">react</button>
+                 </div>
+
+            </article>
+        </div>
+    </section>
+  </main>
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
+    Coded by <a href="#">z83studio</a>.
+  </footer>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+
+:root {
+    --neutral-0: hsl(0, 0%, 100%);
+    --green-50: hsl(180, 52%, 96%);
+    --green-400: hsl(180, 29%, 50%);
+    --green-900: hsl(180, 14%, 20%);
+    --gray-400: hsl(180, 8%, 52%);
+    --ff-primary: "League Spartan", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.5rem;
+    font-family: var(--ff-primary);
+    background-color: var(--green-50);
+}
+
+.content_container {
+    width: 90vw;
+    max-width: 110rem;
+    margin-inline: auto;
+}
+
+.abstract_bg {
+    width: 100%;
+    height: 18rem;
+    background-color: var(--green-400);
+    background-image: url("./images/bg-header-mobile.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+}
+
+.page_header {
+    transform: translateY(-50%);
+}
+
+.filter_btn_container {
+    background-color: var(--neutral-0);
+    padding: 2rem;
+    border-radius: .5rem;
+    align-items: center;
+    gap: 2rem;
+    display: flex;
+    box-shadow: 2px 2px 2rem hsla(180, 29%, 50%, 0.5);
+    /* visibility: hidden;
+    opacity: 0; */
+    display: none;
+}
+
+.filter_btn_container.active {
+    /* visibility: visible;
+    opacity: 1; */
+    display: flex;
+}
+
+.filter_tags_container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.6rem;
+}
+
+.filter_tag {
+    display: inline-flex;
+}
+
+.tag {
+    padding: .85rem 1rem;
+    background-color: var(--green-50);
+    color: var(--green-400); 
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: .4rem;
+    text-transform: capitalize;
+}
+
+.closeBtn {
+    cursor: pointer;
+    background-color: var(--green-400);
+    color: var(--neutral-0);
+    border: none;
+    padding: .85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: .4rem;
+    border-bottom-right-radius: .4rem;
+}
+
+.closeBtn:hover {
+    background-color: var(--green-900);
+}
+
+.clear_btn {
+    cursor: pointer;
+    background-color: transparent;
+    padding: .25rem;
+    border: none;
+    font-size: 1.7rem;
+    font-family: inherit;
+    font-weight: 700;
+    color: var(--gray-400);
+}
+
+.clear_btn:hover {
+    text-decoration: underline;
+}
+
+/* SECTION JOBLIST */
+.jobList {
+    padding-block: 6.4rem;
+}
+
+.page_header:has(.active) + .jobList {
+    padding-block: 0;
+}
+
+.jobs_grid {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 4.8rem;
+    /* margin-top: 6rem; */
+}
+
+.job_offer_card {
+    background-color: var(--neutral-0);
+    padding: 3.4rem;
+    padding-top: 0;
+    border-radius: 1rem;
+    box-shadow: 2px 2px 2rem hsla(180, 29%, 50%, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.job_offer_card.tagged {
+    border-left: .65rem solid var(--green-400);
+}
+
+.logo_wrapper img {
+    display: block;
+    transform: translateY(-50%);
+    width: 6.4rem;
+}
+
+.job_description_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    margin-top: -1.6rem;
+}
+
+.job_offer_info {
+    display: flex;
+    gap: 1.4rem;
+    align-items: center;
+}
+
+.company {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--green-400);
+}
+
+.new,
+.featured {
+    color: var(--neutral-0);
+    padding: .5rem 1rem;
+    border-radius: 100vmax;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+.new {
+    background-color: var(--green-400);
+    margin-right: .65rem;
+}
+
+.featured {
+    background-color: var(--green-900);
+}
+
+.job_title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: var(--green-900);
+}
+
+.job_desc {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.job_desc_text {
+    color: var(--gray-400);
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.job_desc_text.lowercase {
+    text-transform: lowercase;
+}
+
+.dot {
+    background-color: var(--gray-400);
+    display: block;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 100vmax;
+}
+
+.hard_skills_tags_list {
+    /* margin-left: auto; */
+    /* align-self: center; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.6rem;
+}
+
+.skill_btn {
+    cursor: pointer;
+    border: none;
+    padding: .65rem 1rem;
+    background-color: var(--green-50);
+    color: var(--green-400);
+    font-size: 1.6rem;
+    font-weight: 700;
+    border-radius: .5rem;
+    text-transform: capitalize;
+}
+
+.skill_btn:hover {
+    background-color: var(--green-900);
+    color: var(--neutral-0);
+}
