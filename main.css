@@ -27,6 +27,27 @@ body {
     background-color: var(--green-50);
 }
 
+svg path {
+    fill: currentColor;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+:focus-visible {
+    outline: 2px solid var(--green-900);
+    outline-offset: 2px;
+}
+
 .content_container {
     width: 90vw;
     max-width: 110rem;
@@ -52,17 +73,13 @@ body {
     padding: 2rem;
     border-radius: .5rem;
     align-items: center;
+    justify-content: space-between;
     gap: 2rem;
-    display: flex;
     box-shadow: 2px 2px 2rem hsla(180, 29%, 50%, 0.5);
-    /* visibility: hidden;
-    opacity: 0; */
     display: none;
 }
 
 .filter_btn_container.active {
-    /* visibility: visible;
-    opacity: 1; */
     display: flex;
 }
 
@@ -110,7 +127,7 @@ body {
     padding: .25rem;
     border: none;
     font-size: 1.7rem;
-    font-family: inherit;
+    font-family: var(--ff-primary);
     font-weight: 700;
     color: var(--gray-400);
 }
@@ -125,7 +142,7 @@ body {
 }
 
 .page_header:has(.active) + .jobList {
-    padding-block: 0;
+    padding-block: 1.6rem;
 }
 
 .jobs_grid {
@@ -137,7 +154,7 @@ body {
 
 .job_offer_card {
     background-color: var(--neutral-0);
-    padding: 3.4rem;
+    padding: 3.2rem;
     padding-top: 0;
     border-radius: 1rem;
     box-shadow: 2px 2px 2rem hsla(180, 29%, 50%, 0.5);
@@ -160,6 +177,8 @@ body {
     flex-direction: column;
     gap: 1.6rem;
     margin-top: -1.6rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid hsla(180, 8%, 52%, 0.25);;
 }
 
 .job_offer_info {
