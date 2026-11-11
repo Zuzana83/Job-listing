@@ -43,6 +43,33 @@ svg path {
     border-width: 0;
 }
 
+.err-msg {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 90%;
+    max-width: 36rem;
+    transform: translate(-50%, 100%);
+    z-index: 100;
+    background-color: var(--neutral-0);
+    padding: 3.2rem 2rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: .8rem;
+    box-shadow: 2px 2px 2rem hsla(180, 29%, 50%, 0.5);
+}
+
+.err-msg p {
+    font-size: 2rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.err-msg.show {
+    display: flex;
+}
+
 :focus-visible {
     outline: 2px solid var(--green-900);
     outline-offset: 2px;
