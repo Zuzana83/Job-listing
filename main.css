@@ -77,13 +77,13 @@ svg path {
 
 .content_container {
     width: 90vw;
-    max-width: 110rem;
+    max-width: 115rem;
     margin-inline: auto;
 }
 
 .abstract_bg {
     width: 100%;
-    height: 18rem;
+    height: 16rem;
     background-color: var(--green-400);
     background-image: url("./images/bg-header-mobile.svg");
     background-size: cover;
@@ -93,6 +93,7 @@ svg path {
 
 .page_header {
     transform: translateY(-50%);
+    margin-bottom: 6.4rem;
 }
 
 .filter_btn_container {
@@ -125,7 +126,7 @@ svg path {
     padding: .85rem 1rem;
     background-color: var(--green-50);
     color: var(--green-400); 
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
     border-radius: .4rem;
     text-transform: capitalize;
@@ -161,22 +162,18 @@ svg path {
 
 .clear_btn:hover {
     text-decoration: underline;
+    color: var(--green-400);
 }
 
 /* SECTION JOBLIST */
-.jobList {
-    padding-block: 6.4rem;
-}
-
-.page_header:has(.active) + .jobList {
-    padding-block: 1.6rem;
+.page_header:has(.active) {
+    margin-bottom: 1rem;
 }
 
 .jobs_grid {
     display: grid;
     grid-auto-flow: row;
-    row-gap: 4.8rem;
-    /* margin-top: 6rem; */
+    row-gap: 4rem;
 }
 
 .job_offer_card {
@@ -196,7 +193,7 @@ svg path {
 .logo_wrapper img {
     display: block;
     transform: translateY(-50%);
-    width: 6.4rem;
+    width: 4.8rem;
 }
 
 .job_description_wrapper {
@@ -205,7 +202,7 @@ svg path {
     gap: 1.6rem;
     margin-top: -1.6rem;
     padding-bottom: 1.6rem;
-    border-bottom: 1px solid hsla(180, 8%, 52%, 0.25);;
+    border-bottom: 1px solid hsla(180, 8%, 52%, 0.25);
 }
 
 .job_offer_info {
@@ -215,7 +212,7 @@ svg path {
 }
 
 .company {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--green-400);
 }
@@ -246,6 +243,11 @@ svg path {
     color: var(--green-900);
 }
 
+.job_title:hover {
+    cursor: pointer;
+    color: var(--green-400);
+}
+
 .job_desc {
     display: flex;
     gap: 1rem;
@@ -272,27 +274,92 @@ svg path {
 }
 
 .hard_skills_tags_list {
-    /* margin-left: auto; */
-    /* align-self: center; */
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.8rem;
     margin-top: 1.6rem;
 }
 
 .skill_btn {
     cursor: pointer;
     border: none;
-    padding: .65rem 1rem;
+    padding: .45rem 0.9rem;
     background-color: var(--green-50);
     color: var(--green-400);
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    border-radius: .5rem;
+    border-radius: .25rem;
     text-transform: capitalize;
 }
 
 .skill_btn:hover {
-    background-color: var(--green-900);
+    background-color: var(--green-400);
     color: var(--neutral-0);
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 65rem) {
+    .abstract_bg {
+        background-image: url("./images/bg-header-desktop.svg");
+        background-size: cover;
+        background-position: center;
+    }
+
+    .filter_btn_container {
+        padding: 2rem 3.2rem;
+    }
+
+    .jobs_grid {
+        row-gap: 2.4rem;
+    }
+
+    .job_offer_card {
+        padding-top: 3.2rem;
+        border-radius: 0.6rem;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: 2.4rem;
+        align-items: center;
+    }
+
+    .logo_wrapper img {
+        transform: translateY(0);
+        width: 6.4rem;
+    }
+
+    .job_description_wrapper {
+        gap: 1.2rem;
+        margin-top: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .hard_skills_tags_list {
+        gap: 1.8rem;
+        margin-top: 0;
+        justify-content: end;
+    }
+}
+
+@media screen and (min-width: 75rem) {
+    .logo_wrapper img {
+        width: 8.6rem;
+    }
+
+    .company {
+        font-size: 1.8rem;
+    }
+   
+    .job_title {
+        font-size: 2rem;
+        letter-spacing: 0.02em;
+    }
+
+    .job_desc {
+        gap: 2rem;
+    }
+
+    .job_desc_text {
+        letter-spacing: 0.01em;
+    }
 }

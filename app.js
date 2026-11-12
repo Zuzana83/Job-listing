@@ -5,6 +5,7 @@ const filterBtnsContainer = document.querySelector(".filter_btn_container");
 const filterTagsContainer = document.querySelector(".filter_tags_container");
 const clearBtn = document.getElementById("clearBtn");
 const errMsg = document.getElementById("errMsg");
+const statusRegionEl = document.getElementById("statusRegion");
 
 let activeTags = [];
 let allJobs = [];
@@ -77,6 +78,61 @@ function displayJobList(list) {
     }).join("");
     jobsContainer.innerHTML = jobsCards;
 }
+
+function updateUI() {
+    let filteredJobList = allJobs.filter(job => {
+        return activeTags.every(tag => job.jobTags.includes(tag));
+    });
+    const activeFilterBtns = activeTags.map(btn => {
+        return `<li class="filter_tag">
+                    <span class="tag">${btn}</span>
+                    <button type="button" aria-label="Remove filter ${btn}" class="closeBtn" data-id="${btn}">
+                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="#FFF" fill-rule="evenodd" d="M11.314 0l2.121 2.121-4.596 4.596 4.596 4.597-2.121 2.121-4.597-4.596-4.596 4.596L0 11.314l4.596-4.597L0 2.121 2.121 0l4.596 4.596L11.314 0z"/></svg>
+                    </button>
+                </li>`
+    }).join("");
+    filterTagsContainer.innerHTML = activeFilterBtns;
+    filterBtnsContainer.classList.toggle("active", activeTags.length > 0);
+
+    if(filteredJobList.length === 0) {
+         statusRegionEl.textContent = "No jobs matched your filter."
+    } else if(filteredJobList.length === 1) {
+        statusRegionEl.textContent = `1 job matches your filters.`
+    } else {
+        statusRegionEl.textContent = `${filteredJobList.length} jobs match your filters.`
+    }
+    
+    displayJobList(filteredJobList);
+}
+
+jobsContainer.addEventListener("click", function(e) {
+    const skillBtn = e.target.closest(".skill_btn");
+    if(skillBtn) {
+        const btnID = skillBtn.dataset.id;
+        if(!activeTags.includes(btnID)) {
+            activeTags.push(btnID);
+        }
+        updateUI();
+    }
+});
+
+clearBtn.addEventListener("click", function() {
+    activeTags = [];
+    updateUI();
+});
+
+filterTagsContainer.addEventListener("click", function(e) {
+    const closeBtn = e.target.closest(".closeBtn");
+
+    if(closeBtn) {
+        const jobTag = closeBtn.dataset.id;
+        activeTags = activeTags.filter(function(btn) {
+            return btn !== jobTag;
+        });
+        updateUI();
+    }
+});
+
 
 async function init() {
     const jobs = await fetchJobs();
