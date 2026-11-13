@@ -317,7 +317,7 @@ svg path {
         padding-top: 3.2rem;
         border-radius: 0.6rem;
         display: grid;
-        grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: auto minmax(0, 0.9fr) minmax(0, 1.1fr);
         column-gap: 2.4rem;
         align-items: center;
     }

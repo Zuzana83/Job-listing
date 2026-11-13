@@ -1,127 +1,113 @@
-# Frontend Mentor - Job listings with filtering
+# Frontend Mentor - Job listings with filtering solution
 
-![Design preview for the Job listings with filtering coding challenge](preview.jpg)
+This is a solution to the [Job listings with filtering challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/job-listings-with-filtering-ivstIPCt). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-## Welcome! 👋
+## Table of contents
 
-Thanks for checking out this front-end coding challenge.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
+- [Acknowledgments](#acknowledgments)
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects.
 
-**To do this challenge, you need a good understanding of HTML, CSS and JavaScript.**
+## Overview
 
-## The challenge
+### The challenge
 
-Your challenge is to build out this job listing page and get it looking as close to the design as possible.
-
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-Your users should be able to:
+Users should be able to:
 
 - View the optimal layout for the site depending on their device's screen size
 - See hover states for all interactive elements on the page
 - Filter job listings based on the categories
 
-### Filtering
+### Screenshot
 
-#### Option 1
+![Project screenshot](./screenshot.png)
 
-Filter job listings based on the categories using the HTML `data-` attribute. In this option, you'd use the hardcoded content that already exists in the [index.html](./index.html) file.
 
-The categories are:
+### Links
 
-- Role: Frontend, Backend, Fullstack
-- Level: Junior, Midweight, Senior
-- Languages: Python, Ruby, JavaScript, HTML, CSS
-- Tools: React, Sass, Vue, Django, RoR (Ruby on Rails)
+- Solution URL: [Add solution URL here](https://github.com/Zuzana83/Job-listing)
+- Live Site URL: [Add live site URL here](https://zuzana83.github.io/Job-listing/)
 
-So, if a job listing is for has the following categories `Frontend, Junior, JavaScript, React` your HTML data attributes would look like this `data-role="frontend" data-level="junior" data-languages="javascript" data-tools="react"`.
+## My process
 
-#### Option 2
+### Built with
 
-Use the [data.json](./data.json) file to pull the data and then dynamically add the content. This would be perfect if you're looking to practice a JS library/framework like React, Vue, or Svelte.
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- CSS Grid
+- Mobile-first workflow
+- Vanilla JavaScript (no frameworks or libraries)
 
-To add a filter, the user needs to click on the tablets on the right side of the listing on desktop or the bottom on mobile. For each filter added, only listings containing all selected filters should be returned.
+### What I learned
 
-### Want some support on the challenge? 
+This project is the second, "official" version of a challenge I first attempted on my own, rebuilt with a specific mission: fix the architectural flaws I suspected in my first attempt and treat accessibility as a first-class feature instead of an afterthought. Following my usual approach of picking two or three genuinely new territories per project, this one had three:
 
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+Normalizing externally shaped data. The challenge's JSON scatters each job's filterable tags across four fields — role and level as strings, languages and tools as (sometimes empty) arrays — while my filtering logic wanted one flat array per job, like my first version had. Instead of rewriting the filter to interrogate four fields forever, I flattened the data once at load time:
 
-## Where to find everything
+```js
+const jobTags = [job.level, job.role, ...job.tools, ...job.languages];
+const newJob = { ...job, jobTags };
+```
+Translation at the border, native shape inside — the four-part template for rendering tag buttons collapsed into a single .map(), and the filtering logic survived the data-format change completely unchanged.
 
-Your task is to build out the project to the designs inside the `/design` folder. You will find both a mobile and a desktop version of the design.
+Territories 2 and 3: Keyboard operation and focus, as features. Together they forced the biggest idea of the rebuild, which fixes the central flaw of my first version: derive the view from state, never mutate the source.
 
-The designs are in JPG static format. Using JPGs will mean that you'll need to use your best judgment for styles such as `font-size`, `padding` and `margin`.
+My first version kept a copy of the data and filtered that copy into itself on every click. It seemed to work, because filtering a shrinking array by a new tag happens to produce correct results — right up until the moment a filter was removed, when the destroyed data could no longer answer "which jobs match only the remaining filters?" The rebuild replaced that design with two module-level state holders — the pristine normalized job list and an array of active filter tags — and a single updateUI() function that derives everything from them:
 
-If you would like the Figma design file to inspect the design in more detail, you can [subscribe as a PRO member](https://www.frontendmentor.io/pro).
+```js
+function updateUI(refocus = false) {
+    const filteredJobList = allJobs.filter(job =>
+        activeTags.every(tag => job.jobTags.includes(tag))
+    );
+    // render cards, render filter chips, toggle visibility, announce status...
+}
+```
 
-You will find all the required assets in the `/images` folder. The assets are already optimized.
+Every interaction — adding a tag, removing one, clearing all — became "modify activeTags, call updateUI()." No special cases, no recovery logic. A detail I'm proud of: clearing filters required no branch at all, because [].every(...) is true for every job — "no requirements" satisfies itself mathematically. My first version's painful special-case code for the empty-filters state simply dissolved.
 
-There is also a `style-guide.md` file containing the information you'll need, such as color palette and fonts.
+The focus-management lesson began as a bug I could feel but not see. During testing I activated a filter with Enter and the focus ring vanished: my updateUI() replaces the cards via innerHTML, which destroys the element holding focus, and the browser silently drops focus to the page — so every Tab restart walked the whole list from the top. Diagnosing it meant predicting where focus should be and letting the browser disagree with me. The fix required knowing who triggered the update: keyboard activation synthesizes a click event with detail === 0, which became the signal for updateUI(refocus) to repair focus after rendering — first skill button of the results, falling back to the first filter chip's remove button when nothing matches. Removing a chip needed its own strategy: keep focus on the next remaining chip (the user is editing their query, so keep their hands on the query controls), with a guard for removing the last chip, where I fell back to the results instead of crashing:
 
-## Using AI coding assistants
+```js
+if (focusedBtn) {
+    focusedBtn.focus();
+} else {
+    const skillBtn = jobsContainer.querySelector(".skill_btn");
+    skillBtn?.focus();
+}
+```
 
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
+Mouse users get none of this movement — clicks never reposition focus or scroll — because their pointer is their position, and a viewport that yanks away from the user's hand is hostility, not polish.
 
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
+Supporting accessibility decisions surfaced small but instructive lessons throughout: aria-label silently does nothing on a plain <div>, so the filter chips became a real <ul> with the label attached to it. The filter-count announcement lives in its own visually-hidden role="status" element, deliberately outside the container that toggles display: none, since a live region can't announce while it's hidden — and it writes distinct grammar for zero, one, and many results. The error toast uses role="alert" with its message inserted dynamically at failure time.
 
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
+One bug taught me a delegation lesson I'll reuse constantly: my remove-chip button worked only every third or fourth click. The cause was e.target matching the inner <svg> icon, not the button. Switching both delegated handlers to e.target.closest(".closeBtn") eliminated the entire class of child-element mismatch, and taught me to read a flaky bug as geometry, not chance.
 
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
 
-## Building your project
+### Continued development
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+-Test all announcements (filter counts, the error toast) with a real screen reader such as Orca or NVDA — the patterns I chose are the documented-reliable ones, but empirical verification with actual assistive tech is the standard I want to hold.
 
-1. Initialize your project as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/).
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+### Useful resources
 
-## Deploying your project
+-  [MDN Web Docs](https://developer.mozilla.org/) - My first stop for closest(), Array.prototype.every(), optional chaining, :focus-visible, and the fetch/Response API — especially the page confirming that fetch does not reject on HTTP errors, which is why the resp.ok check exists.
+- After reading MDN, I generally search for real-world implementations of the same concept to see the theory applied in an actual project, which usually helps it click faster than the reference documentation alone.
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+### AI Collaboration
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+- I used AI as a mentor, the same way as my previous projects — working through concepts in plain English before writing code, drafting my own implementations, testing against real data, and iterating on what I observed. For this project the highest-value moments were tracing state by hand: walking through which array each filter read from
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
 
-## Create a custom `README.md`
+## Acknowledgments
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+Thanks to this AI mentor/guide approach I am able to solve more complex projects, learn new concepts, explore more advanced javascript which I would not be able to do just on my own, without verifying I understand theory and implement it correctly.
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
-
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
-
-## Submitting your solution
-
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
-
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
-
-## Sharing your solution
-
-There are multiple places you can share your solution:
-
-1. Share your solution page in the **#finished-projects** channel of the [community](https://www.frontendmentor.io/community).
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
-
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
-
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
-
-## Got feedback for us?
-
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
-
-This challenge is completely free. Please share it with anyone who will find it useful for practice.
-
-**Have fun building!** 🚀

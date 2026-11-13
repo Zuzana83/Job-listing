@@ -79,7 +79,7 @@ function displayJobList(list) {
     jobsContainer.innerHTML = jobsCards;
 }
 
-function updateUI() {
+function updateUI(refocus = false) {
     let filteredJobList = allJobs.filter(job => {
         return activeTags.every(tag => job.jobTags.includes(tag));
     });
@@ -95,14 +95,23 @@ function updateUI() {
     filterBtnsContainer.classList.toggle("active", activeTags.length > 0);
 
     if(filteredJobList.length === 0) {
-         statusRegionEl.textContent = "No jobs matched your filter."
+        statusRegionEl.textContent = "No jobs matched your filter."
     } else if(filteredJobList.length === 1) {
         statusRegionEl.textContent = `1 job matches your filters.`
     } else {
         statusRegionEl.textContent = `${filteredJobList.length} jobs match your filters.`
     }
-    
     displayJobList(filteredJobList);
+    if(refocus) {
+        const skillBtn = jobsContainer.querySelector(".skill_btn");
+        if(skillBtn) {
+            skillBtn.focus();
+        } else {
+            const closeChip = filterTagsContainer.querySelector(".closeBtn");
+            if(closeChip) closeChip.focus();
+        }
+    }
+    
 }
 
 jobsContainer.addEventListener("click", function(e) {
@@ -112,13 +121,14 @@ jobsContainer.addEventListener("click", function(e) {
         if(!activeTags.includes(btnID)) {
             activeTags.push(btnID);
         }
-        updateUI();
+        const isKeyboard = e.detail === 0;
+        updateUI(isKeyboard);
     }
 });
 
 clearBtn.addEventListener("click", function() {
     activeTags = [];
-    updateUI();
+    updateUI(true);
 });
 
 filterTagsContainer.addEventListener("click", function(e) {
@@ -126,10 +136,19 @@ filterTagsContainer.addEventListener("click", function(e) {
 
     if(closeBtn) {
         const jobTag = closeBtn.dataset.id;
+        const idx = activeTags.indexOf(jobTag);
         activeTags = activeTags.filter(function(btn) {
             return btn !== jobTag;
         });
         updateUI();
+        const closeBtnsArr = [...document.querySelectorAll(".closeBtn")];
+        const focusedBtn = closeBtnsArr[idx];
+        if(focusedBtn) {
+            focusedBtn.focus();
+        } else {
+            const skillBtn = jobsContainer.querySelector(".skill_btn");
+            skillBtn?.focus();
+        }
     }
 });
 
